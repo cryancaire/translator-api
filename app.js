@@ -10,6 +10,12 @@ const port = process.env.PORT || 4567;
 app.get('/translate/:toLang/:toTranslate', async (req, res) => {
     let lang = req.params.toLang || 'en';
 
+    let splitText = req.params.toTranslate.split(" ");
+    
+    let removedLang = splitText.shift();
+
+    splitText = splitText.join(" ");
+
     var options = {
         method: 'POST',
         url: 'https://microsoft-translator-text.p.rapidapi.com/translate',
@@ -19,7 +25,7 @@ app.get('/translate/:toLang/:toTranslate', async (req, res) => {
           'x-rapidapi-host': 'microsoft-translator-text.p.rapidapi.com',
           'x-rapidapi-key': process.env.API_KEY
         },
-        data: [{Text: req.params.toTranslate }]
+        data: [{Text: splitText }]
       };
     axios.request(options).then(function (response) {
         res.send(response.data[0].translations[0].text);
