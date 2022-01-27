@@ -8,6 +8,14 @@ const Channels = require('./models/Channels');
 
 const port = process.env.PORT || 4567;
 
+const mongoURL = process.env.MONGO_URL;
+const dbName = process.env.MONGO_DB;
+
+const server = app.listen(port, () => {
+    console.log(`Server is listening on ${port}`);
+});
+
+ mongoose.connect(`${mongoURL}/${dbName}?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.get('/translate/:api_key/:toLang/:toTranslate', async (req, res) => {
     let channelName = req.headers['nightbot-channel'] || undefined;
@@ -82,9 +90,3 @@ app.get('/translate/:api_key/:toLang/:toTranslate', async (req, res) => {
     });
 });
  */
-
-const server = app.listen(port, () => {
-    console.log(`Server is listening on ${port}`);
-});
-
- mongoose.connect(`mongodb://localhost/translation_channels?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true });
