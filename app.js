@@ -57,7 +57,6 @@ app.get('/translate/:api_key/:toLang/:toTranslate', async (req, res) => {
             await channel.save();
     
             channel = await Channels.findOne();
-            console.log(await Channels.findOne())
         }
         
 /*           if (!channel.name) {
