@@ -34,8 +34,13 @@ const server = app.listen(port, () => {
 
 app.get('/translate/:api_key/:toLang/:toTranslate', async (req, res) => {
     let channelName = req.headers['nightbot-channel'] || undefined;
+    let channelNameTrimmed;
     if (channelName) {
-        let channelNameTrimmed = channelName.split("name=")[1].split("&")[0];
+        channelNameTrimmed = channelName.split("name=")[1].split("&")[0];
+    } else {
+        channelNameTrimmed = "unknown"
+    }
+        
         const filter = { name: channelNameTrimmed };
         const update = { $inc: { uses: 1 } };
         let theChannel = await Channels.findOne(filter);
@@ -58,20 +63,6 @@ app.get('/translate/:api_key/:toLang/:toTranslate', async (req, res) => {
     
             channel = await Channels.findOne();
         }
-        
-/*           if (!channel.name) {
-            const newChannel = new Channels({
-                name: channelName,
-                uses: 1
-            });
-            newChannel.save(err => {
-                if (err) {
-                    console.log(`An error has occurred: ${err}`);
-                }
-            });
-          } */
-        
-    }
     if (!req.params.api_key) {
         res.send("Error, no API Key provided!");
     }
