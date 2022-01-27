@@ -14,7 +14,7 @@ app.get('/translate/:api_key/:toLang/:toTranslate', async (req, res) => {
     if (channelName) {
         channelName.split("name=")[1].split("&")[0];
         const filter = { name: channelName };
-        const update = { uses: uses+1 };
+        const update = { $inc: { uses: 1 } };
         let channel = await Channels.findOneAndUpdate(filter, update, {
             new: true
           });
@@ -87,4 +87,4 @@ const server = app.listen(port, () => {
     console.log(`Server is listening on ${port}`);
 });
 
-mongoose.connect(`mongodb://localhost/translation_channels?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true });
+ mongoose.connect(`mongodb://localhost/translation_channels?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true });
