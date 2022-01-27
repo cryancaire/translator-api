@@ -8,6 +8,11 @@ const port = process.env.PORT || 4567;
 
 
 app.get('/translate/:api_key/:toLang/:toTranslate', async (req, res) => {
+    let channelName = req.headers['nightbot-channel'].split('name=')[0] || undefined;
+
+    if (channelName) {
+        console.log(`Channel Name = ${channelName}`)
+    }
     if (!req.params.api_key) {
         res.send("Error, no API Key provided!");
     }
@@ -30,7 +35,6 @@ app.get('/translate/:api_key/:toLang/:toTranslate', async (req, res) => {
       };
     axios.request(options).then(function (response) {
         res.send(response.data[0].translations[0].text);
-        console.log(req.headers['nightbot-channel']);
     }).catch(function (error) {
         console.error(error);
     });
