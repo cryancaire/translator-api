@@ -23,6 +23,18 @@ app.get('/translate/:api_key/:toLang/:toTranslate', async (req, res) => {
         channelName.split("name=")[1].split("&")[0];
         const filter = { name: channelName };
         const update = { $inc: { uses: 1 } };
+        let theChannel = await Channels.findOne(filter);
+        if (!theChannel) {
+            const newChannel = new Channels({
+                name: channelName,
+                uses: 1
+            });
+            newChannel.save(err => {
+                if (err) {
+                    console.log(`An error has occurred: ${err}`);
+                }
+            });
+        }
         let channel = await Channels.findOneAndUpdate(filter, update, {
             new: true
           });
