@@ -3,14 +3,33 @@ var axios = require("axios").default;
 const express = require('express');
 const { urlencoded } = require('body-parser');
 const app = express();
+const mongoose = require('mongoose');
+const Channels = require('./models/Channels');
 
 const port = process.env.PORT || 4567;
 
 
 app.get('/translate/:api_key/:toLang/:toTranslate', async (req, res) => {
-    let channelName = req.headers['nightbot-channel'].split("name=")[1].split("&")[0] || undefined;
+    let channelName = req.headers['nightbot-channel'] || undefined;
     if (channelName) {
-        console.log(`Channel Name = ${channelName}`)
+        channelName.split("name=")[1].split("&")[0];
+        const filter = { name: channelName };
+        const update = { uses: uses+1 };
+        let channel = await Channels.findOneAndUpdate(filter, update, {
+            new: true
+          });
+          if (!channel.name) {
+            const newChannel = new Channels({
+                name: channelName,
+                uses: 1
+            });
+            newChannel.save(err => {
+                if (err) {
+                    console.log(`An error has occurred: ${err}`);
+                }
+            });
+          }
+        
     }
     if (!req.params.api_key) {
         res.send("Error, no API Key provided!");
@@ -67,3 +86,5 @@ app.get('/translate/:api_key/:toLang/:toTranslate', async (req, res) => {
 const server = app.listen(port, () => {
     console.log(`Server is listening on ${port}`);
 });
+
+mongoose.connect(`mongodb://localhost/translation_channels?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true });
