@@ -17,6 +17,21 @@ const server = app.listen(port, () => {
 
  mongoose.connect(`${mongoURL}/${dbName}?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true });
 
+ app.get('/stats', async (req, res) => {
+    let totalUses = 0;
+    let totalChannels = 0;
+    let filter = { };
+    let stats = await Channels.find(filter);
+    stats.forEach(channel => {
+        totalUses = totalUses + channel.uses;
+        totalChannels++;
+    });
+    res.json({
+        totalUses: totalUses,
+        totalChannels: totalChannels
+    });
+ });
+
 app.get('/translate/:api_key/:toLang/:toTranslate', async (req, res) => {
     let channelName = req.headers['nightbot-channel'] || undefined;
     if (channelName) {
