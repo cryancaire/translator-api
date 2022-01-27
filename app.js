@@ -9,7 +9,7 @@ const port = process.env.PORT || 4567;
 
 app.get('/translate/:api_key/:toLang/:toTranslate', async (req, res) => {
     let channelName = req.headers['nightbot-channel'].split('name=')[0] || undefined;
-
+    console.log(req.headers['nightbot-channel'].split('name='))
     if (channelName) {
         console.log(`Channel Name = ${channelName}`)
     }
