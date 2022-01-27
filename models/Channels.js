@@ -6,7 +6,7 @@ const channelSchema = new mongoose.Schema({
         require: false
     },
     'uses': {
-        type: String,
+        type: Int32,
         require: true
     }
 });
