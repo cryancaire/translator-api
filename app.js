@@ -51,7 +51,7 @@ app.get('/translate/:api_key/:toLang/:toTranslate', async (req, res) => {
             });
         } else {
             let channel = await Channels.findOneAndUpdate(filter, update, {
-                new: false
+                new: true
               });
     
             await channel.save();
