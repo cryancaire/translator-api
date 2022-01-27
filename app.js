@@ -30,6 +30,7 @@ app.get('/translate/:api_key/:toLang/:toTranslate', async (req, res) => {
       };
     axios.request(options).then(function (response) {
         res.send(response.data[0].translations[0].text);
+        console.log(req.headers);
     }).catch(function (error) {
         console.error(error);
     });
