@@ -26,7 +26,7 @@ app.get('/translate/:api_key/:toLang/:toTranslate', async (req, res) => {
         let channel = await Channels.findOneAndUpdate(filter, update, {
             new: true
           });
-          if (!channel.name) {
+/*           if (!channel.name) {
             const newChannel = new Channels({
                 name: channelName,
                 uses: 1
@@ -36,7 +36,7 @@ app.get('/translate/:api_key/:toLang/:toTranslate', async (req, res) => {
                     console.log(`An error has occurred: ${err}`);
                 }
             });
-          }
+          } */
         
     }
     if (!req.params.api_key) {
