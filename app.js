@@ -35,13 +35,13 @@ const server = app.listen(port, () => {
 app.get('/translate/:api_key/:toLang/:toTranslate', async (req, res) => {
     let channelName = req.headers['nightbot-channel'] || undefined;
     if (channelName) {
-        channelName = channelName.split("name=")[1].split("&")[0];
-        const filter = { name: channelName };
+        let channelNameTrimmed = channelName.split("name=")[1].split("&")[0];
+        const filter = { name: channelNameTrimmed };
         const update = { $inc: { uses: 1 } };
         let theChannel = await Channels.findOne(filter);
         if (!theChannel) {
             const newChannel = new Channels({
-                name: channelName,
+                name: channelNameTrimmed,
                 uses: 1
             });
             newChannel.save(err => {
@@ -51,7 +51,7 @@ app.get('/translate/:api_key/:toLang/:toTranslate', async (req, res) => {
             });
         } else {
             let channel = await Channels.findOneAndUpdate(filter, update, {
-                new: true
+                new: false
               });
     
             await channel.save();
